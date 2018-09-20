@@ -72,7 +72,7 @@ def FindEll(X, U, W = 1):
     return np.array([e1,e2])
 
 class Cadmos(object):
-    def __init__(self,Y,gamma=7,k=5,W=None,X0=None,GT=None,loss=[], nb_updates=10000,
+    def __init__(self,Y,gamma=7,k=5,W=None,X0=None,GT=None,loss=[],nb_updates=10000,
                  past_iterations=0):
         self.Y = np.copy(Y)
         self.gamma = gamma
@@ -83,8 +83,10 @@ class Cadmos(object):
             self.update_thresh = True
         self.nit = past_iterations
 
+        row,column = self.Y.shape # careful - untested with rectangular images
+
         # Gaussian windows
-        if self.W is None:
+        if W is None:
             self.W = np.ones(Y.shape)
         else:
             self.W = W
@@ -110,7 +112,6 @@ class Cadmos(object):
         self.alpha = filter_convolve(self.X, self.filters) #Starlet transform of X
 
         # U matrices 
-        _,row,column = noisy_gals.shape # careful - untested with rectangular images
         self.U = makeUi(row, column)
 
         #Moment constraints normalization
@@ -132,8 +133,9 @@ class Cadmos(object):
     def comp_grad(self, X):
         """ Compute the loss gradient."""
         R = X - self.Y
+        mom_cons = G(R,self.U,self.W)
         return self.gamma*self.W*np.array(
-               [self.mu[i]*self.G(R,self.U,self.W)[i]*self.U[i] 
+               [self.mu[i]*mom_cons[i]*self.U[i] 
                 for i in range(6)]).sum(0) + R
 
 
@@ -158,7 +160,7 @@ class Cadmos(object):
         #Update thresholds
         if self.update_thresh:
             if self.nit < self.nb_updates:
-                self.thresholds = update_thresholds(self)
+                self.update_thresholds()
             else:
                 self.update_thresh = False
         
