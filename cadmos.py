@@ -10,7 +10,7 @@ Created on Fri Jun 22 15:05:30 2018
 import numpy as np
 import matplotlib.pyplot as plt
 from modopt.signal.wavelet import get_mr_filters, filter_convolve
-from makeU import makeUi
+from genU import makeUi
 from matplotlib.colors import LinearSegmentedColormap, BoundaryNorm
 
 # Sam's custom cmap
