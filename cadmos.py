@@ -72,7 +72,7 @@ def FindEll(X, U, W = 1):
     return np.array([e1,e2])
 
 class Cadmos(object):
-    def __init__(self,Y,gamma=7,k=5,W=None,X0=None,GT=None,loss=[],nb_updates=10000,
+    def __init__(self,Y,gamma=7,k=5,W=None,X0=None,GT=None,loss=[],nb_updates=5,
                  past_iterations=0):
         self.Y = np.copy(Y)
         self.gamma = gamma
@@ -106,7 +106,7 @@ class Cadmos(object):
         # First guess
         if X0 is None:
             # if no first guess, initialize with uniform image
-            self.X = np.ones(Y.shape)
+            self.X = np.ones(Y.shape) / Y.size
         else:
             self.X = np.copy(X0)
         self.alpha = filter_convolve(self.X, self.filters) #Starlet transform of X
