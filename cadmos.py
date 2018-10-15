@@ -6,7 +6,7 @@
 """
 import numpy as np
 from modopt.signal.wavelet import get_mr_filters, filter_convolve
-from genU import makeUi
+from genU import makeUi, G, FindEll
 
 def hard_thresh(signal, threshold):
     """Apply hard thresholding."""
@@ -30,10 +30,6 @@ def norm2(signal):
 def norm1(signal):
     """Compute l1 norm of a signal."""
     return np.linalg.norm(signal,1)
-
-def G(X,U,W = 1):
-    """Compute the 6 inner products of an image and U."""
-    return np.array([(X*W*U[i]).sum() for i in range(6)])
 
 def prior(alpha):
     """Compute the sparsity constraint of the loss."""
@@ -60,16 +56,6 @@ def reconstruct(alpha, positivity = True):
     if positivity:
         X = X*(X>0)
     return X
-
-def FindEll(X, U, W = 1):
-    """Estimate the ellipticity parameters on an image."""
-    GX = G(X,U,W)
-    mu20 = 0.5*(GX[3]+GX[4])-GX[0]**2/GX[2]
-    mu02 = 0.5*(GX[3]-GX[4])-GX[1]**2/GX[2]
-    mu11 = GX[5]-GX[0]*GX[1]/GX[2]
-    e1 = (mu20-mu02)/(mu20+mu02)
-    e2 = 2*(mu11)/(mu20+mu02)
-    return np.array([e1,e2])
 
 class Cadmos(object):
     def __init__(self,Y,gamma=7,k=5,W=None,X0=None,GT=None,loss=[],nb_updates=5,
