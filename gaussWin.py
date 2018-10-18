@@ -3,7 +3,11 @@ from sf_tools.image.shape import Ellipticity
 import galsim
 from galsim.hsm import FindAdaptiveMom
 
-def EllipticalGaussian(e1, e2, sig, xc=128, yc=128, stamp_size=(256,256)):
+def EllipticalGaussian(e1, e2, sig, xc=None, yc=None, stamp_size=(256,256)):
+    if xc is None:
+        xc = stamp_size[0]/2
+    if yc is None:
+        yc = stamp_size[0]/2
     # compute centered grid
     ranges = np.array([np.arange(i) for i in stamp_size])
     x = np.outer(ranges[0] - xc, np.ones(stamp_size[1]))
@@ -18,16 +22,6 @@ def GenNoise(SNR, obj):
     s = np.mean(np.linalg.norm(obj,axis=(1,2))**2)
     sigsq = s/(SNR*obj.shape[1]**2)
     return np.random.normal(scale=np.sqrt(sigsq),size=obj.shape)
-    
-def MatchedGaussian(obj,R2_offset=0):
-    # compute shape
-    Ell = Ellipticity(obj)
-    e1, e2 = Ell.e
-    xc, yc = Ell.centroid
-    R2 = Ell.r2.real + R2_offset
-    sig = np.sqrt(R2/2)
-    gauss = EllipticalGaussian(e1,e2,sig,xc,yc,obj.shape)
-    return gauss
 
 def AdaptativeGaussian(obj, rmOutliers = True):
     stamp_size = obj[0,:,:].shape
