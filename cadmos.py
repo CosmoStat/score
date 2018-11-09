@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 
-@authors: fnammour, Morgan A. Schmitz
+@authors: Fadi Nammour, Morgan A. Schmitz
 """
 import numpy as np
 from modopt.signal.wavelet import get_mr_filters, filter_convolve
@@ -25,7 +25,7 @@ def MS_hard_thresh(wave_coef, n_sigma):
 
 def norm2(signal):
     """Compute l2 norm of a signal."""
-    return np.linalg.norm(signal,2)
+    return np.linalg.norm(signal)
 
 def norm1(signal):
     """Compute l1 norm of a signal."""
@@ -75,10 +75,10 @@ class Cadmos(object):
         if W is None:
             self.W = np.ones(Y.shape)
         else:
-            self.W = W
+            self.W = np.copy(W)
 
         # (Optional) ground truth for diagnostics
-        self.GT = GT
+        self.GT = np.copy(GT)
 
         # Get wavelet filters
         self.filters = get_mr_filters((row,column), coarse = True)
@@ -161,9 +161,17 @@ class Cadmos(object):
 
         self.nit += 1
 
-    def denoise(self, niter):
-        for _ in range(niter):
+    def denoise(self, niter, epsilon=1e-3):
+        halt_condition = False
+        for itr in range(niter):
             self.ForwardBackwardIter()
+            if itr>0:
+                current_loss = np.array(self.loss[-1])
+                previous_loss = np.array(self.loss[-3])
+                halt_condition = np.abs(norm1(previous_loss-current_loss))<=epsilon \
+                                 and epsilon!=0
+            if halt_condition:
+                break
         return self.X
 
     def diagnostics(self, verbose=True):
