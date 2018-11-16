@@ -13,8 +13,8 @@ def EllipticalGaussian(e1, e2, sig, xc=None, yc=None, stamp_size=(256,256)):
     x = np.outer(ranges[0] - xc, np.ones(stamp_size[1]))
     y = np.outer(np.ones(stamp_size[0]),ranges[1] - yc)
     # shift it to match centroid
-    xx = (1-e1/2)*x - e2/2*y
-    yy = (1+e1/2)*y - e2/2*x
+    xx = (1-e1)*x - e2*y
+    yy = (1+e1)*y - e2*x
     # compute elliptical gaussian
     return np.exp(-(xx ** 2 + yy ** 2) / (2 * sig ** 2))
 
