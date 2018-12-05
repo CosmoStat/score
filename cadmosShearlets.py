@@ -5,10 +5,6 @@ Created on Fri Jun 22 15:05:30 2018
 
 @author: fnammour
 """
-#Import AlphaTransform from another directory
-import sys
-alpha_path = './alpha-transform-master'
-sys.path.insert(0, alpha_path)
 
 #%%DATA INITIALIZATION
 import numpy as np
@@ -38,6 +34,20 @@ def norm1(signal):
 
 def norm(signal):
     return np.linalg.norm(signal)
+
+def get_adjoint_coeff():
+    column = trafo.width
+    row = trafo.height
+    n_scales = len(trafo.indices)
+    #Attention: the type of the output of trafo.adjoint_transform is complex128
+    #and by creating coeff without specifying the type it is set to float64
+    #by default when using np.zeros
+    coeff = np.zeros((n_scales,row,column))
+    for s in range(n_scales):
+        temp = np.zeros((n_scales,row,column))
+        temp[s,row//2,column//2]=1
+        coeff[s] = trafo.adjoint_transform(temp, do_norm=False)
+    return coeff
 
 def shear_norm(signal,shearlets):
     shearlet_norms = np.array([norm(s) for s in shearlets])
@@ -126,7 +136,7 @@ gamma = 9 #trade-off parameter
 filters = get_mr_filters((row,column), coarse = True)# Get starlet filters
 trafo = AST(Y.shape[1], Y.shape[0], [0.5]*3,real=True,parseval=True,verbose=False)# Get shearlet filters
 shearlets = trafo.shearlets
-adjoints = trafo.adjoint_coeff
+adjoints = get_adjoint_coeff()
 #Normalize shearlets filter banks
 adjoints = shear_norm(adjoints,shearlets)
 shearlets = shear_norm(shearlets,shearlets)
@@ -268,10 +278,6 @@ plt.show()
 
 #EVALUATING RESULTS
 
-#load true ellipticities
-ell_true = np.load('./Denoising_SNR20/true_ellipticitiesNO.npy')
-ell_true = ell_true[gal_num,:]
-
 # Compute unweighted ellipticities
 ell_Y = FindEll(Y,U)
 ell_X = FindEll(X,U)
@@ -286,13 +292,13 @@ print("Difference between X and Y : {}\n".format(norm2(ell_X-ell_Y)))
 plt.figure(8)
 plt.suptitle('Unweighted $e_1$ comparaison SNR = {} ({} iterations)'.format(SNR,niter))
 plt.subplot(311)
-plt.scatter(ell_true[0],ell_Y[0])
+plt.scatter(ell_GT[0],ell_Y[0])
 plt.plot([-1,1],[-1,1],'r')
 plt.xlabel('True')
 plt.ylabel('Y')
 plt.title('True vs Y')
 plt.subplot(312)
-plt.scatter(ell_true[0],ell_X[0])
+plt.scatter(ell_GT[0],ell_X[0])
 plt.plot([-1,1],[-1,1],'r')
 plt.xlabel('True')
 plt.ylabel('X')
