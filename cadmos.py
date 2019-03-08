@@ -58,12 +58,15 @@ def reconstruct(alpha, positivity = True):
     return X
 
 class Cadmos(object):
-    def __init__(self,Y,gamma=7,k=5,W=None,X0=None,GT=None,loss=[],nb_updates=5,
+    def __init__(self,Y,gamma=7,k=5,W=None,X0=None,GT=None,loss=None,nb_updates=5,
                  past_iterations=0):
         self.Y = np.copy(Y)
         self.gamma = gamma
         self.k = k
-        self.loss = loss
+        if loss is None:
+            self.loss = []
+        else:
+            self.loss = loss
         self.nb_updates = nb_updates
         if self.nb_updates:
             self.update_thresh = True
