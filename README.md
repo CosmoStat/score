@@ -109,8 +109,8 @@ The code `generate_dataset.py` allows to recreate the exactly the same dataset u
 ## Authors 
 ## [SECTION UNFINISHED]
 
-* **Fadi Nammour** - *Initial work* - [PurpleBooth](http://www.cosmostat.org/people/fadi-nammour)
-* **Morgan Schmitz** - *Initial work* - [PurpleBooth](http://www.cosmostat.org/people/mschmitz)
+* [**Fadi Nammour**](http://www.cosmostat.org/people/fadi-nammour) - *Initial work* -
+* [**Morgan Schmitz**](http://www.cosmostat.org/people/mschmitz) - *Initial work* -
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
