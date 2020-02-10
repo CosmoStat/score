@@ -104,13 +104,13 @@ for obs, psf, gt in zip(gals_obs,psfs,gals):
 ## Reproducible Research
 
 
-The code `generate_dataset.py` allows to recreate the exactly the same dataset used for the numerical experiments of the original paper[INSERT LINK] of `score`.
+The code `generate_dataset.py` allows to recreate the exactly the same dataset used for the numerical experiments of the original paper[INSERT LINK] of `score`. +ADD INFO ABOUT COSMOS CATALOG AND PARAMETER CHOICE.
 
 ## Authors 
 ## [SECTION UNFINISHED]
 
-* **Fadi Nammour** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Morgan Schmitz** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Fadi Nammour** - *Initial work* - [PurpleBooth](http://www.cosmostat.org/people/fadi-nammour)
+* **Morgan Schmitz** - *Initial work* - [PurpleBooth](http://www.cosmostat.org/people/mschmitz)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
