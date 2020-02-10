@@ -102,12 +102,12 @@ for obs, psf, gt in zip(gals_obs,psfs,gals):
 ```
 
 ## Reproducible Research
-
+## [SECTION UNDER CONSTRUCTION]
 
 The code `generate_dataset.py` allows to recreate the exactly the same dataset used for the numerical experiments of the original paper[INSERT LINK] of `score`. +ADD INFO ABOUT COSMOS CATALOG AND PARAMETER CHOICE.
 
 ## Authors 
-## [SECTION UNFINISHED]
+## [SECTION UNDER CONSTRUCTION]
 
 * [**Fadi Nammour**](http://www.cosmostat.org/people/fadi-nammour) - *Initial work* -
 * [**Morgan Schmitz**](http://www.cosmostat.org/people/mschmitz) - *Initial work* -
@@ -119,7 +119,7 @@ See also the list of [contributors](https://github.com/your/project/contributors
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments 
-## [SECTION UNFINISHED]
+## [SECTION UNDER CONSTRUCTION]
 
 * Samuel Farrens
 * Ming
