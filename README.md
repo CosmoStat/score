@@ -3,8 +3,8 @@
 The Shape COnstraint REstoration algorithm ([SCORE](#SCORE)) is a proximal algorithm based on sparsity and shape constraints to restore images.
 
 - [Getting Started](#Getting-Started)
-  * [Prerequisites](### Prerequisites)
-  * [Installing](### Installing)
+  * [Prerequisites](###Prerequisites)
+  * [Installing](###Installing)
 - [Running the examples](##Running-the-examples)
   * [Example 1](###Example-1)
   * [Example 2](###Example-2)
