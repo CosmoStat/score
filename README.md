@@ -98,7 +98,7 @@ It is also possible to change other parameters in `score`. The following is an e
 
 
 | Parameter     | Type                                 | Information                                                        |
-| ------------- |:------------------------------------:| ------------------------------------------------------------------:|
+| ------------- |:------------------------------------:| -------------------------------------------------------------------|
 | `obs`         | 2D Numpy Array                       | observation (required)                                             |
 | `psf`         | 2D Numpy Array                       | convolution kernel (required for deconvolution)                    |
 | `ground_truth`| 2D Numpy Array (none by default)     | ground_truth image (optional)                                      |
