@@ -1,6 +1,6 @@
 # SCORE
 
-The Shape COnstraint REstoration algorithm ([SCORE](#SCORE)) is a proximal algorithm based on sparsity and shape constraints to restore images. Its main purpose is to restore images while preserving their shape information. The chosen shape information here, is the ellipticity which is used to study galaxies for cosmological purposes. In practice, SCORE give an estimation <img src="https://render.githubusercontent.com/render/math?math=\hat{X}" width="15"> of the ground truth image, <img src="https://render.githubusercontent.com/render/math?math=X_T" width="25">, of the inverse problem :
+The Shape COnstraint REstoration algorithm ([SCORE](#SCORE "recursive call")) is a proximal algorithm based on sparsity and shape constraints to restore images. Its main purpose is to restore images while preserving their shape information. The chosen shape information here, is the ellipticity which is used to study galaxies for cosmological purposes. In practice, SCORE give an estimation <img src="https://render.githubusercontent.com/render/math?math=\hat{X}" width="15"> of the ground truth image, <img src="https://render.githubusercontent.com/render/math?math=X_T" width="25">, of the inverse problem :
 
 <p align="center"><img src="https://render.githubusercontent.com/render/math?math=Y = X_T\ast H %2B N\quad," height="18"></p>
 
