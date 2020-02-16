@@ -16,6 +16,7 @@ where <img src="https://render.githubusercontent.com/render/math?math=Y, H \text
 - [Running the examples](##Running-the-examples)
   * [Example 1](###Example-1)
   * [Example 2](###Example-2)
+- [Parameters](##Parameters)
 - [Reproducible Research](##Reproducible-Research)
 - [Authors](##Authors)
 - [License](##License)
@@ -94,7 +95,26 @@ denoiser = score(gamma=0.5)
 denoiser.denoise(obs=gal_obs) #the result will be in denoiser.solution
 ```
 
-It is also possible to change other parameters in `score`. The following is an exhaustive list of parameters of `score` :
+It is also possible to change [other parameters](##Parameters) in `score`.
+
+
+### Example 2
+
+In this deconvolution case, we compare the score algorithm with a value of γ = 1 (which is close to its optimal computed value) and the Sparse Restoration Algorithm (γ = 0 and no Removal of Isolated Pixels). We loop on a stack of galaxy images and perfom both deconvolution operation on each image:
+
+```python
+#loop
+for obs, psf, gt in zip(gals_obs,psfs,gals):
+    #deconvolve
+    g1.deconvolve(obs=obs,ground_truth=gt,psf=psf)
+    g0.deconvolve(obs=obs,ground_truth=gt,psf=psf)
+    #update ellipticity error lists
+    g1_error_list += [g1.relative_ell_error]
+    g0_error_list += [g0.relative_ell_error]
+```
+## Parameters
+
+The following is an exhaustive list of parameters of `score` :
 
 
 | Parameter     | Type                                 | Information                                                        |
@@ -116,22 +136,6 @@ It is also possible to change other parameters in `score`. The following is an e
 | `n_itr`       | positive integer                     | maximum number of iterations (optional)                            |
 | `tolerance`   | positive scalar < 1 (1e-6 by default)| threshold of the convergence test for deconvolution (optional)     |
 | `verbose`     | boolean (true by default)            | to activate verbose (optional)                                     |
-
-
-### Example 2
-
-In this deconvolution case, we compare the score algorithm with a value of γ = 1 (which is close to its optimal computed value) and the Sparse Restoration Algorithm (γ = 0 and no Removal of Isolated Pixels). We loop on a stack of galaxy images and perfom both deconvolution operation on each image:
-
-```python
-#loop
-for obs, psf, gt in zip(gals_obs,psfs,gals):
-    #deconvolve
-    g1.deconvolve(obs=obs,ground_truth=gt,psf=psf)
-    g0.deconvolve(obs=obs,ground_truth=gt,psf=psf)
-    #update ellipticity error lists
-    g1_error_list += [g1.relative_ell_error]
-    g0_error_list += [g0.relative_ell_error]
-```
 
 ## Reproducible Research
 
