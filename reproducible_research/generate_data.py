@@ -16,7 +16,7 @@ def check_dir(dir_path):
         os.makedirs(dir_path)
         
 path_catalog = '/Users/username/path/to/COSMOS_25.2_training_sample/'
-data_path = '//Users/username/path/to/Data_folder_name/'
+data_path = '/Users/username/path/to/Data_folder_name/'
 check_dir(data_path)
 
 # Set numpy seed
@@ -85,7 +85,7 @@ list_gal = []
 list_ell = []
 list_psf = []
 list_gal_conv = []
-list_gal_noisy = [[]]*len(SNRs)
+list_gal_obs = [[]]*len(SNRs)
 
 n_digit = int(np.ceil(np.log10(gal_num)))
 
@@ -121,10 +121,10 @@ for i in range(gal_num):
     
     for ind_snr, snr in enumerate(SNRs):
         #add Noise
-        noisy_img = galsim_img.copy()
+        obs_img = galsim_img.copy()
         g_noise = galsim.GaussianNoise(sigma=sig_noise, rng=g_seed) #Generate Noise
-        g_sig_noise = noisy_img.addNoiseSNR(noise=g_noise, snr=snr, preserve_flux=True)
-        list_gal_noisy[ind_snr] = list_gal_noisy[ind_snr]+[np.copy(noisy_img.array)]
+        g_sig_noise = obs_img.addNoiseSNR(noise=g_noise, snr=snr, preserve_flux=True)
+        list_gal_obs[ind_snr] = list_gal_obs[ind_snr]+[np.copy(obs_img.array)]
 
 #save data
 def g_to_e(g1,g2):
@@ -140,10 +140,10 @@ np.save(data_path+'galaxies.npy',np.array(list_gal))
 np.save(data_path+'PSFs.npy',np.array(list_psf))
 np.save(data_path+'convolved_galaxies.npy',np.array(list_gal_conv))
 
-array_gal_noisy = np.array(list_gal_noisy)
+array_gal_obs = np.array(list_gal_obs)
 
 for ind_snr,snr in enumerate(SNRs):
     output_path = data_path+'SNR{}/'.format(snr)
     check_dir(output_path)
-    np.save(output_path+'noisy_galaxies_SNR{}.npy'.format(snr),array_gal_noisy[ind_snr])
+    np.save(output_path+'observed_galaxies_SNR{}.npy'.format(snr),array_gal_obs[ind_snr])
 print('Done')

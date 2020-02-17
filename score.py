@@ -165,9 +165,9 @@ class score:
         #beta factor, multiplicative factor to guarantee that beta did not
         #exceed its upperbound
         if 'beta_factor' in kwargs:
-            if is_number(kwargs['beta_den']):
-                if 1>=kwargs['beta_den']>=0:
-                    self.beta_factor = kwargs['beta_den']
+            if is_number(kwargs['beta_factor']):
+                if 1>=kwargs['beta_factor']>=0:
+                    self.beta_factor = kwargs['beta_factor']
                 else:
                     raise ValueError("'beta_factor' must be between 0 and 1.")
             else:
@@ -276,13 +276,13 @@ class score:
         
         #Tolerance for convergence criteria in deconvolution
         if 'tolerance' in kwargs:
-            if is_number(kwargs['tol']):
+            if is_number(kwargs['tolerance']):
                 if kwargs['tolerance']>=0:
-                    self.tolerance = kwargs['tol']
+                    self.tolerance = kwargs['tolerance']
                 else:
-                    raise ValueError(posnum_error_message.format('tol'))
+                    raise ValueError(posnum_error_message.format('tolerance'))
             else:
-                raise TypeError(posnum_error_message.format('tol'))
+                raise TypeError(posnum_error_message.format('tolerance'))
             
         #boolean to activate verbose
         if 'verbose' in kwargs:
