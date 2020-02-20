@@ -8,7 +8,6 @@ Created on Wed Feb 12 11:04:42 2020
 
 from score import score
 import numpy as np
-import pickle
 import os
 
 #define paths
@@ -16,12 +15,10 @@ root_path = '/Users/username/path/to/'
 data_path = root_path+'data_folder/'
 
 #load data
-#set SNRs and load the SNR-gamma correspondence dictionary
+#set SNRs
 SNRs = [40,75,150,380]
-pickle_in = open('./SNR_gamma_dec.pkl','rb')
-SNR_gamma = pickle.load(pickle_in)
 
-#Load ground truth galaxies
+#Load psf
 PSF = np.load(data_path+'psfs.npy')
 gal_num,row,column = PSF.shape
 digit_num = int(np.round(np.log10(gal_num)))+1
@@ -34,22 +31,23 @@ tolerance = 1e-6 #to test convergence
 n_itr = 150 #number of iteration
 k = 4 #Set k for k-sigma hard thresholding
 beta_factor = 0.95 #to ensure that beta is not too big
-rip = True #Removal of Isolated Pixel in the solution
+rip = False #Removal of Isolated Pixel in the deconvolution solution
 first_guess = np.ones((row,column))/(row*column) #first guess
+gamma = 0.0 #desactivate the shape constraint
 
 #define result path
 results_path = root_path+'results/{0}_conv_k{1}/'.format(n_itr,k)
 
+#instantiate the solver
+solver = score(k=k,n_starlet=n_starlet,n_shearlet=n_shearlet,epsilon=lip_eps,\
+         rip=rip,tolerance=tolerance,beta_factor=beta_factor,gamma=gamma,\
+         first_guess=first_guess,verbose=False)
+
 #loop on SNR
 for SNR in SNRs:
-    #set gamma according to the SNR
-    gamma = SNR_gamma[SNR]
     #load observed galaxies
-    obs_gals = np.load(data_path+'SNR{0}/observed_galaxies_SNR{0}.npy'.format(SNR))
-    #instantiate the solver
-    solver = score(k=k,n_starlet=n_starlet,n_shearlet=n_shearlet,epsilon=lip_eps,\
-               rip=rip,tolerance=tolerance,beta_factor=beta_factor,gamma=gamma,\
-               first_guess=first_guess,verbose=False)
+    obs_gals = np.load(data_path+'SNR{0}/noisy_galaxies_SNR{0}.npy'.format(SNR))
+    obs_gals = obs_gals[:2]
     decon_list = list() #deconvolved galaxies list
     ell_list = list() #ellipticity list
     gal_counter = 1
@@ -68,5 +66,6 @@ for SNR in SNRs:
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
     
-    np.save(output_directory+'deconvolved_galaxies_gamma_star.npy',np.array(decon_list))
-    np.save(output_directory+'ellipticities_gamma_star.npy',np.array(ell_list))
+    np.save(output_directory+'deconvolved_galaxies_gamma_zero.npy',np.array(decon_list))
+    np.save(output_directory+'ellipticities_gamma_zero.npy',np.array(ell_list))
+    

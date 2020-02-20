@@ -148,20 +148,23 @@ class score:
     def set_param(self,**kwargs):
         """This methods allows the user to set the values of the optional
         parameters.
-        INPUT: beta_factor, positive number
-               epsilon, positive number
-               n_maps, positive integer
-               n_shearlet, positive integer
-               n_starlet, positive integer
-               starlet_gen, 1 or 2
-               beta, postive number
-               k, positive integer
-               rip, boolean
-               gamma, non-negative number
-               n_itr, positive integer
-               tolerance, positive number
-               verbose, boolean
-        OUTPUT: None"""
+        INPUT: None
+        OUTPUT: None
+        -----------------------------------------------------------------------
+        PARAMETERS: 
+            beta_factor, positive number
+            epsilon, positive number
+            n_maps, positive integer
+            n_shearlet, positive integer
+            n_starlet, positive integer
+            starlet_gen, 1 or 2
+            beta, postive number
+            k, positive integer
+            rip, boolean
+            gamma, non-negative number
+            n_itr, positive integer
+            tolerance, positive number
+            verbose, boolean"""
         #beta factor, multiplicative factor to guarantee that beta did not
         #exceed its upperbound
         if 'beta_factor' in kwargs:
@@ -549,12 +552,15 @@ class score:
     def init_input(self, **kwargs):
         """This method restores the observed image. If self._bool_dec is true,
         a deconvolution, it performs a deconvolution. Else it performs a 
-        denosing. For more details on the input parameters see 'set_param.'
+        denosing.
         INPUT: obs, 2D Numpy Array
                psf (if self._bool_dec==True), 2D Numpy Array
                ground_truth (optional), 2D Numpy Array
                first_guess (optional), 2D Numpy Array
-        OUTPUT: restored, 2D Numpy Array"""
+        OUTPUT: restored, 2D Numpy Array
+        -----------------------------------------------------------------------
+        PARAMETERS:
+           For more details on the input parameters see 'set_param'. """
         #fetch required inputs
         
         #start by assuming that the value of beta is not given by the user
@@ -682,8 +688,10 @@ class score:
         self.loss = np.array(self.loss)
     
     def _restore(self,**kwargs):
-        """This method performs restoration. For more details on its 
-        arguments, see the method 'set_param'."""
+        """This method performs restoration. 
+        -----------------------------------------------------------------------
+        PARAMETERS:
+           For more details on the input parameters see 'set_param'."""
         #user given values of parameters
         self.set_param(**kwargs)
         if self.verbose:
@@ -714,15 +722,19 @@ class score:
             self.diagnostic()
     
     def deconvolve(self, **kwargs):
-        """This method performs deconvolution. For more details on its 
-        arguments, see the method 'set_param'."""
+        """This method performs deconvolution.
+        -----------------------------------------------------------------------
+        PARAMETERS:
+           For more details on the input parameters see 'set_param'."""
         self._bool_dec = True
         self._restore(**kwargs)
 
             
     def denoise(self, **kwargs):
-        """This method performs denoising. For more details on its arguments,
-        see the method 'set_param'."""
+        """This method performs denoising.
+        -----------------------------------------------------------------------
+        PARAMETERS:
+           For more details on the input parameters see 'set_param'."""
         self._bool_dec = False
         self._restore(**kwargs)
     
@@ -755,7 +767,7 @@ class score:
     
     def diagnostic(self,**kwargs):
         """This method prints the diagnostic of score.
-        INPUT: None
+        INPUT: ground_truth (optional), 2D Numpy Array
         OUTPUT: None"""
         
         #variables name and value lists

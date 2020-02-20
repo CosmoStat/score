@@ -9,14 +9,15 @@ Created on Fri Dec 20 11:42:54 2019
 from astropy.io import fits
 import galsim
 import numpy as np
+from score import score
 import os
 
 def check_dir(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
         
-path_catalog = '/Users/username/path/to/COSMOS_25.2_training_sample/'
-data_path = '/Users/username/path/to/Data_folder_name/'
+path_catalog = '/Users/fnammour/Documents/Librairies/Axel_code/generate_sersic/COSMOS_25.2_training_sample/'
+data_path = '/Users/fnammour/Desktop/test/'
 check_dir(data_path)
 
 # Set numpy seed
@@ -78,6 +79,11 @@ nx = 96 #set the number of columns
 ny = 96 #set the number of lines
 pixel_scale = 0.05
 
+#Generate a score instance to estimate ground truth ellipticity
+estimator = score()
+estimator.n_row, estimator.n_col = nx,ny
+estimator.set_defaults()
+estimator.init_const()
 
 SNRs = [40,75,150,380]
 
@@ -85,6 +91,7 @@ list_gal = []
 list_ell = []
 list_psf = []
 list_gal_conv = []
+list_ell_conv = []
 list_gal_obs = [[]]*len(SNRs)
 
 n_digit = int(np.ceil(np.log10(gal_num)))
@@ -98,8 +105,10 @@ for i in range(gal_num):
     e1,e2 = get_g(g_sigma, 2)
     gal = gal.shear(g1=e1, g2=e2)
     
-    list_ell += [np.array([e1,e2])]
-    list_gal += [gal.drawImage(nx=nx, ny=ny, scale=pixel_scale).array]
+    #ground truth galaxy image
+    true_img = np.copy(gal.drawImage(nx=nx, ny=ny, scale=pixel_scale).array)
+    list_gal += [true_img]
+    list_ell += [estimator.estimate_ell(true_img)]
     
     #Generate a PSF
     fwhm = fwhm_min + np.random.rand() * (fwhm_max - fwhm_min)
@@ -117,7 +126,9 @@ for i in range(gal_num):
     psf_img = psf.drawImage(nx=nx, ny=ny, scale=pixel_scale)
     
     list_psf += [psf_img.array]
-    list_gal_conv += [np.copy(galsim_img.array)]
+    conv_img = np.copy(galsim_img.array)
+    list_gal_conv += [conv_img]
+    list_ell_conv += [estimator.estimate_ell(conv_img)]
     
     for ind_snr, snr in enumerate(SNRs):
         #add Noise
@@ -126,19 +137,11 @@ for i in range(gal_num):
         g_sig_noise = obs_img.addNoiseSNR(noise=g_noise, snr=snr, preserve_flux=True)
         list_gal_obs[ind_snr] = list_gal_obs[ind_snr]+[np.copy(obs_img.array)]
 
-#save data
-def g_to_e(g1,g2):
-    shear = galsim.Shear(g1=g1,g2=g2)
-    ell = -shear.e1, shear.e2 #reverse the signe of e_1 to get our conventions
-    return ell
-
-array_g = np.array(list_ell)
-
-np.save(data_path+'ellipticities.npy',array_g)
-np.save(data_path+'converted_ellipticities',np.array([g_to_e(*g) for g in array_g]))
 np.save(data_path+'galaxies.npy',np.array(list_gal))
+np.save(data_path+'ellipticities.npy',np.array(list_ell))
 np.save(data_path+'PSFs.npy',np.array(list_psf))
 np.save(data_path+'convolved_galaxies.npy',np.array(list_gal_conv))
+np.save(data_path+'convolved_ellipticities.npy',np.array(list_ell_conv))
 
 array_gal_obs = np.array(list_gal_obs)
 
