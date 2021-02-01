@@ -139,7 +139,7 @@ The following is an exhaustive list of parameters of `score` :
 
 ## Reproducible Research
 
-The code `generate_dataset.py` allows to recreate the exactly the same dataset used for the numerical experiments of the [original paper of `score`](https://www.google.com/doodles/30th-anniversary-of-pac-man). To be able to run this code, the catalog `COSMOS_25.2_training_sample` is required. It is available as a compressed file, `COSMOS_25.2_training_sample.tar.gz`, on [this link](https://github.com/GalSim-developers/GalSim/wiki/RealGalaxy%20Data).
+The code `generate_dataset.py` allows to recreate the exactly the same dataset used for the numerical experiments of the [original paper of `score`](https://arxiv.org/abs/2101.10021). To be able to run this code, the catalog `COSMOS_25.2_training_sample` is required. It is available as a compressed file, `COSMOS_25.2_training_sample.tar.gz`, on [this link](https://github.com/GalSim-developers/GalSim/wiki/RealGalaxy%20Data).
 
 ## Authors 
 
